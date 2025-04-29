@@ -1,10 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
 @import "tailwindcss";
 @theme{
-  --color-primary: #457B9D; /* Primary / Header / Button*/
-  --color-accent: #E63946; /*Accent / Error / CTA */
-  --color-light: #F1FAEE; /* Background / Cards */
+  --color-primary: #3484F0; /* Primary / Header / Button*/
+  --color-secondary :#C4DBFA;
+  --color-accent: #5661f1; /*Accent / Error / CTA */
+  --color-light: #F7F7F7; /* Background / Cards */
   --color-cyan: #A8DADC; /* Secondary Bg / Borders / Cards */
-  --color-deep: #1D3557; /* Text / Footer / Button hover */
+  --color-deep: #525151; /* Text / Footer / Button hover */
+  --color-gray: #E6E6E6;
+  --color-yellow: #FCD462;
+  --color-green: #10CA48;
+  --font-openSans: "Open Sans", sans-serif;
   --animate-slideUp: slideUp ease 2s forwards 0s;
   @keyframes slideUp {
     0% {
