@@ -1,11 +1,8 @@
 :root {
   color: rgba(255, 255, 255, 0.87);
-  --primary : #457B9D;
-  --secondary : #A8DADC;
-  --deep : #1D3557;
-  --light : #F1FAEE;
-  --accent : #E63946;
+  --light : #fbfbfd;
   background-color: --(light);
+  
 }
 /* 
 a {
