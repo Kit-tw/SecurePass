@@ -3,6 +3,7 @@ import './index.css'
 import App from './App.tsx'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import PasswordGenerationPage from './page/passwordGeneration.tsx'
+import BreachDetectionPage from './page/BreachDetection.tsx'
 
 const router = createBrowserRouter([
   {
@@ -12,6 +13,10 @@ const router = createBrowserRouter([
   {
     path:"/passwordgenerate",
     element:<PasswordGenerationPage/>
+  },
+  {
+    path:"/breachdetection",
+    element:<BreachDetectionPage/>
   }
 ])
 createRoot(document.getElementById('root')!).render(

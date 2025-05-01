@@ -29,11 +29,11 @@ const generatepassFn = (
 };
 
 export default function GeneratePassword() {
-  const [length, setLength] = useState<number>(0);
+  const [length, setLength] = useState<number>(8);
   const [condition, setCondition] = useState([
     { name: "UpperCase", state: false },
     { name: "Special Case", state: false },
-    { name: "LowerCase", state: false },
+    { name: "LowerCase", state: true },
     { name: "Number", state: false },
   ]);
   const [password,setPassword] = useState<string>("");

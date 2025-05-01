@@ -10,6 +10,8 @@
   --color-gray: #E6E6E6;
   --color-yellow: #FCD462;
   --color-green: #10CA48;
+  --color-red: #DA0303;
+  --color-lightred:#FFE5E9;
   --font-openSans: "Open Sans", sans-serif;
   --animate-slideUp: slideUp ease 2s forwards 0s;
   @keyframes slideUp {
@@ -22,6 +24,12 @@
     }
   }
 
+}
+
+@layer utilities{
+  .clip-bg {
+    clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+  }
 }
 
 /* #root {

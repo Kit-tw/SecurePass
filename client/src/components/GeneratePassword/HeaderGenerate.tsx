@@ -10,7 +10,12 @@ export default function HeaderGenerate(){
 return(
     <header className="flex flex-col-reverse lg:flex-row  ">
         <div className="flex flex-col w-full mx-0 md:mx-2 lg:mx-5 mt-10">
-        <label htmlFor="" className="text-4xl text-black font-mono font-bold">Generate Strong Password</label>
+            <div className="flex flex-row text-4xl text-black font-mono font-bold gap-4">
+        <label >Generate</label>
+        <label className='text-primary' >Strong</label>
+        <label >Password</label>
+            </div>
+        {/* TODO : ADD TO COMPONENT AND USE IN BreachHeaderPage too */}
         <div className="flex flex-col bg-gray rounded-lg max-w-5xl mt-5 p-4 shadow-xl/20">
         <label htmlFor="" className="text-deep font-mono text-xl font-bold">Password security starts with creating a strong password</label>
         <label htmlFor="" className="text-deep font-mono ml-4 text-xl font-bold">Best Practices</label>
