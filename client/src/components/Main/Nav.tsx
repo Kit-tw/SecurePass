@@ -11,7 +11,8 @@ export default function NavComponents(){
         
         <Link to={{pathname : "/passwordgenerate"}} className="text-mono text-lg text-black font-bold hover:cursor-pointer hover:text-accent hover:scale-[1.1]  transform transition duration-250">Password Generation</Link>
         <Link to={{pathname : "/breachdetection"}} className="text-mono text-lg text-black font-bold hover:cursor-pointer hover:text-accent hover:scale-[1.1]  transform transition duration-250">Breach Detection</Link>
-        <label htmlFor="" className="text-mono text-lg text-black font-bold hover:cursor-pointer hover:text-accent hover:scale-[1.1]  transform transition duration-250">Login</label>
+
+        <label htmlFor="" className="text-mono text-md text-black font-bold hover:cursor-pointer hover:text-accent hover:scale-[1.1]  transform transition duration-250 bg-yellow rounded-lg p-1">Login</label>
         
         </div>
 

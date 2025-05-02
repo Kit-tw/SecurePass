@@ -29,6 +29,7 @@ const generatepassFn = (
 };
 
 export default function GeneratePassword() {
+  //TODO : Set Cookie to store Length and Condition
   const [length, setLength] = useState<number>(8);
   const [condition, setCondition] = useState([
     { name: "UpperCase", state: false },

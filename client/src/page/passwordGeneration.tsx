@@ -6,10 +6,15 @@ import NavComponents from "../components/Main/Nav";
 export default function PasswordGenerationPage() {
   return (
     <>
+<div className="min-h-screen flex flex-col">
       <NavComponents />
-      <HeaderGenerate/>
-      <GeneratePassword/>
-      <FooterComponents/>
+      <HeaderGenerate />
+      
+      <main className="flex-grow">
+        <GeneratePassword />
+      </main>
+      <FooterComponents />
+    </div>
     </>
   );
 }
