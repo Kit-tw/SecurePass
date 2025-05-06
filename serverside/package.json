@@ -1,0 +1,21 @@
+{
+  "name": "serverside",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start":"npx tsc && node build/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.1",
+    "@types/node": "^22.15.12",
+    "typescript": "^5.8.3"
+  }
+}
