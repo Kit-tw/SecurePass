@@ -118,7 +118,7 @@ export default function BreachHeaderComponent() {
                 </>
               ) : (
                 <label className="font-mono text-xl text-green-600">
-                  Your data is safe ✅
+                  Your data is safe ✅?
                 </label>
               )}
             </main>
