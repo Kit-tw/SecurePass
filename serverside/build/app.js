@@ -4,11 +4,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
+var config_1 = __importDefault(require("./config/config"));
 var app = (0, express_1.default)();
 var port = 3000;
 app.get('/', function (req, res) {
     res.send('Working');
 });
-app.listen(port, function () {
-    console.log("Connected Successfully on port ".concat(port));
+app.listen(config_1.default.port, function () {
+    console.log("Connected Successfully on port ".concat(config_1.default.port));
 });
