@@ -1,7 +1,11 @@
-import express from "express";
+import express , {Express} from "express";
 import config from "./config/config";
-const app = express();
+import { PrismaClient } from "@prisma/client";
 
+const app:Express = express();
+export const prismaClient = new PrismaClient({
+    log:['query']
+});
 app.get('/', (req,res)=>{
     res.send('Working');
 })
