@@ -39,52 +39,43 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateUser = void 0;
+exports.Login = void 0;
 var app_1 = require("../../app");
 var bcryptjs_1 = __importDefault(require("bcryptjs"));
-var CreateUser = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, email, password, hasuser, salt, hashPassword, error_1;
+var Login = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, email, password, user, isMatch, error_1;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
-                _b.trys.push([0, 4, 5, 6]);
+                _b.trys.push([0, 3, 4, 5]);
                 _a = req.body, email = _a.email, password = _a.password;
-                //TODO : Add validate Data (Email)
                 if (!email.trim() || !password.trim()) {
-                    res.status(400).json({ message: 'Email or Password is Empty' });
+                    return [2 /*return*/, res.status(400).json({ message: 'Email or Password is Empty' })];
                 }
-                console.log(email);
                 return [4 /*yield*/, app_1.prismaClient.user.findFirst({
-                        where: { email: email },
+                        where: {
+                            email: email,
+                        },
                     })];
             case 1:
-                hasuser = _b.sent();
-                if (hasuser) {
-                    res.status(400).json({ message: 'Email already Exist!' });
+                user = _b.sent();
+                if (!user) {
+                    return [2 /*return*/, res.status(400).json({ message: 'User not found!' })];
                 }
-                return [4 /*yield*/, bcryptjs_1.default.genSalt(10)];
+                return [4 /*yield*/, bcryptjs_1.default.compare(password, user.password)];
             case 2:
-                salt = _b.sent();
-                return [4 /*yield*/, bcryptjs_1.default.hash(password, salt)];
-            case 3:
-                hashPassword = _b.sent();
-                // const user = await prismaClient.user.create({
-                //     data:{
-                //         email:email,
-                //         password:hashPassword
-                //     }
-                // })
+                isMatch = _b.sent();
                 res.status(200).json({ message: 'user is created' });
-                return [3 /*break*/, 6];
-            case 4:
+                return [3 /*break*/, 5];
+            case 3:
                 error_1 = _b.sent();
                 next(error_1);
-                return [3 /*break*/, 6];
-            case 5:
+                return [3 /*break*/, 5];
+            case 4:
                 app_1.prismaClient.$disconnect;
                 return [7 /*endfinally*/];
-            case 6: return [2 /*return*/];
+            case 5: return [2 /*return*/];
         }
     });
 }); };
-exports.CreateUser = CreateUser;
+exports.Login = Login;
