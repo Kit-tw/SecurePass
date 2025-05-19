@@ -3,8 +3,14 @@ import config from './config/config';
 import { PrismaClient } from '@prisma/client';
 import rootRouter from './routes/rootRouter';
 import { authenticateToken } from './middlewares/authmiddleware';
-
+import cors from 'cors';
 const app: Express = express();
+const corsOptions ={
+    origin:process.env.FrontEnd_URL, 
+    credentials:true,            
+    optionSuccessStatus:200
+}
+app.use(cors(corsOptions));
 app.use(express.json());
 
 export const prismaClient = new PrismaClient();
