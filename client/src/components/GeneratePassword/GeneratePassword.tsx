@@ -73,6 +73,7 @@ export default function GeneratePassword() {
               value={password}
               id="input"
             />
+            {/* TODO: Add Notification when click clipboard */}
             <button className="absolute top-0 end-10 h-full p-2.5 w-[50px]   bg-accent text-white  flex items-center justify-center hover:cursor-pointer" onClick={()=> clipboard(password)}>
               <svg
                 fill="#d9d9d9"

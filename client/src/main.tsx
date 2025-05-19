@@ -23,10 +23,6 @@ const router = createBrowserRouter([
   {
     path:"/managepassword",
     element:<ManagePasswordPage/>
-  },
-  {
-    path:"/test",
-    element:<Popups/>
   }
 ])
 createRoot(document.getElementById('root')!).render(
