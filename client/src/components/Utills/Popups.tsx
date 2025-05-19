@@ -12,7 +12,6 @@ export default function Popups({ onClose }: PopupProps) {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [message ,setMessage] = useState<string>("");
-  
   return (
     <>
       {/* Overlay */}
