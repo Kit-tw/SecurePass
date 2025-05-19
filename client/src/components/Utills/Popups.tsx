@@ -1,5 +1,7 @@
 import { useState } from "react";
 import bg from "../../assets/bg.jpg";
+import axios from "axios";
+import { useMutation } from "@tanstack/react-query";
 interface PopupProps {
   onClose: () => void;
 }
@@ -7,11 +9,69 @@ interface FromState {
   state: "Register" | "Login" | "ForgetPassword";
 }
 
+interface FormPayload {
+  email: string;
+  password: string;
+}
+
 export default function Popups({ onClose }: PopupProps) {
   const [popupform, setPopupform] = useState<FromState>({ state: "Register" });
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [message ,setMessage] = useState<string>("");
+  const [form, setForm] = useState<FormPayload>({
+    email: "",
+    password: "",
+  });
+  const [message, setMessage] = useState<string>("");
+
+  const loginMutation = useMutation({
+    mutationFn: async (payload: FormPayload) => {
+      const reponse = await axios.post(
+        `${import.meta.env.VITE_SecurePass_API}/api/user/signin`,
+        payload
+      );
+      return reponse.data;
+    },
+    onSuccess: (data) => {
+      console.log("Success",data);
+    },
+    onError: (error : any) => {
+      setMessage(error.response.data.message);
+    },
+  });
+
+  const RegisMutation = useMutation({
+    mutationFn: async (payload: FormPayload) => {
+      const reponse = await axios.post(
+        `${import.meta.env.VITE_SecurePass_API}/api/user/signup`,
+        payload
+      );
+      return reponse.data;
+    },
+    onSuccess: (data) => {
+      console.log("Success",data);
+    },
+    onError: (error : any) => {
+      setMessage(error.response.data.message);
+    },
+  });
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!form.email.trim() || !form.password.trim()) {
+      setMessage("Email or Password is Empty");
+      return;
+    }
+    // Todo : Regex Email
+    console.log(  `${import.meta.env.VITE_SecurePass_API}/api/user/signin`)
+    switch(popupform.state){
+      case 'Login':
+        return loginMutation.mutate(form);
+      case 'Register':
+        return RegisMutation.mutate(form);
+      case 'ForgetPassword':
+        return setMessage("Currently Not have this feature");
+      default:
+        return;
+    }
+  };
   return (
     <>
       {/* Overlay */}
@@ -22,7 +82,7 @@ export default function Popups({ onClose }: PopupProps) {
 
       {/* Popup */}
       {/* Close button for desktop */}
-      <div
+      <form onSubmit={handleLogin}
         role="dialog"
         aria-modal="true"
         className="fixed z-50 flex flex-col lg:flex-row bg-white rounded-lg 
@@ -68,8 +128,8 @@ export default function Popups({ onClose }: PopupProps) {
               type="email"
               className="p-3 bg-light text-deep shadow-lg/30 text-lg rounded-3xl w-full"
               placeholder="Enter email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={form.email}
+              onChange={(e) => setForm({ ...form, email: e.target.value })}
               required
             />
             {(popupform.state === "Login" ||
@@ -82,8 +142,10 @@ export default function Popups({ onClose }: PopupProps) {
                   type="password"
                   className="p-3 bg-light text-deep shadow-lg/30 text-lg rounded-3xl w-full"
                   placeholder="Enter password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  value={form.password}
+                  onChange={(e) =>
+                    setForm({ ...form, password: e.target.value })
+                  }
                   required
                 />
               </>
@@ -98,11 +160,11 @@ export default function Popups({ onClose }: PopupProps) {
             ) : (
               ""
             )}
-            {message && <label
-                  className="font-mono text-sm text-deep text-center text-red"
-                >
-                  {message}
-                </label>}
+            {message && (
+              <label className="font-mono text-sm text-deep text-center text-red">
+                {message}
+              </label>
+            )}
             <div className="flex flex-col w-full justify-center">
               <button className="px-10 py-3 bg-yellow rounded-lg hover:text-accent hover:cursor-pointer">
                 {popupform.state === "Login"
@@ -136,7 +198,7 @@ export default function Popups({ onClose }: PopupProps) {
             </div>
           </div>
         </div>
-      </div>
+      </form>
     </>
   );
 }
