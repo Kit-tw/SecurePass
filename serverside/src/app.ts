@@ -15,7 +15,7 @@ app.get('/', (req: Request, res: Response) => {
 app.use('/api', rootRouter);
 
 app.get('/protected', authenticateToken, (req : any ,res : any) => {
-    return res.status(200).send({ message: "This is the protected message "});
+    return res.json({ user: req.user });
 })
 
 app.listen(config.port, () => {

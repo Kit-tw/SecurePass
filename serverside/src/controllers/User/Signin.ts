@@ -4,10 +4,9 @@ import bcrypt from "bcryptjs";
 import { User } from '../../models/user.model';
 import jwt, { JwtPayload, Secret } from 'jsonwebtoken';
 import { generateAccessToken, generateRefreshToken, VerifyRefreshToken } from '../../utils/token.utils';
+import { CustomJwtPayload } from '../../models/customJwtPayload.model';
 
-interface CustomJwtPayload extends JwtPayload {
-    email: string;
-}
+
 
 export const Login = async (
   req: Request,
