@@ -11,6 +11,7 @@ export default function Popups({ onClose }: PopupProps) {
   const [popupform, setPopupform] = useState<FromState>({ state: "Register" });
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [message ,setMessage] = useState<string>("");
   
   return (
     <>
@@ -98,7 +99,11 @@ export default function Popups({ onClose }: PopupProps) {
             ) : (
               ""
             )}
-
+            {message && <label
+                  className="font-mono text-sm text-deep text-center text-red"
+                >
+                  {message}
+                </label>}
             <div className="flex flex-col w-full justify-center">
               <button className="px-10 py-3 bg-yellow rounded-lg hover:text-accent hover:cursor-pointer">
                 {popupform.state === "Login"
