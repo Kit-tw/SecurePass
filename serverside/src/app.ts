@@ -4,6 +4,7 @@ import { PrismaClient } from '@prisma/client';
 import rootRouter from './routes/rootRouter';
 import { authenticateToken } from './middlewares/authmiddleware';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 const app: Express = express();
 const corsOptions ={
     origin:process.env.FrontEnd_URL, 
@@ -12,7 +13,7 @@ const corsOptions ={
 }
 app.use(cors(corsOptions));
 app.use(express.json());
-
+app.use(cookieParser());
 export const prismaClient = new PrismaClient();
 app.get('/', (req: Request, res: Response) => {
   res.send('Working');

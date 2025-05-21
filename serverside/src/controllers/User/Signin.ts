@@ -34,11 +34,11 @@ export const Login = async (
         const user = {email};
         const accessToken = generateAccessToken(user);
         const refreshToken = generateRefreshToken(user);
-
+        
         res.cookie('refreshToken',refreshToken,{httpOnly : true, secure : true,sameSite :'strict', maxAge: 7 * 24 * 60 * 60 * 1000})
         res.status(200).json({accessToken,refreshToken});
     }else{
-         res.status(200).json({message : 'Wrong Credential'});
+         res.status(401).json({message : 'Wrong Credential'});
     }
     console.log(isMatch ? "This password is Match" : "This password is Not Match");
     return;
@@ -51,13 +51,15 @@ export const Login = async (
 
 export const refresh = (req: Request , res : Response , next : NextFunction ) =>{
     const refreshToken = req.cookies.refreshToken;
+    console.log(refreshToken)
     if(!refreshToken){
         res.sendStatus(401);
     }
     try{
         const payload = VerifyRefreshToken(refreshToken) as CustomJwtPayload;
         const accessToken = generateAccessToken({email : payload.email});
-         res.json({ accessToken });
+        console.log(payload)
+        res.json({ accessToken });
     }catch(error){
         res.sendStatus(403);
     }
