@@ -7,6 +7,7 @@ import BreachDetectionPage from './page/BreachDetection.tsx'
 import ManagePasswordPage from './page/ManagePassword.tsx'
 import { QueryClientProvider } from '@tanstack/react-query'
 import queryClient from './queryClient.ts'
+import { AuthProvider } from './components/Utills/AuthProvider.tsx'
 const router = createBrowserRouter([
   {
     path:"/",
@@ -29,7 +30,9 @@ const router = createBrowserRouter([
 createRoot(document.getElementById('root')!).render(
   <>
   <QueryClientProvider client={queryClient}>
+  <AuthProvider>
         <RouterProvider router={router}/>\
+  </AuthProvider>
         </QueryClientProvider>
 
   </>,

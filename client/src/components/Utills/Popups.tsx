@@ -1,7 +1,7 @@
 import { useState } from "react";
 import bg from "../../assets/bg.jpg";
-import axios from "axios";
 import { useMutation } from "@tanstack/react-query";
+import { useAuth } from "./AuthProvider";
 interface PopupProps {
   onClose: () => void;
 }
@@ -15,6 +15,7 @@ interface FormPayload {
 }
 
 export default function Popups({ onClose }: PopupProps) {
+  const {setToken , api} = useAuth();
   const [popupform, setPopupform] = useState<FromState>({ state: "Register" });
   const [form, setForm] = useState<FormPayload>({
     email: "",
@@ -24,14 +25,16 @@ export default function Popups({ onClose }: PopupProps) {
 
   const loginMutation = useMutation({
     mutationFn: async (payload: FormPayload) => {
-      const reponse = await axios.post(
+      const reponse = await api.post(
         `${import.meta.env.VITE_SecurePass_API}/api/user/signin`,
-        payload
+        payload,
+        { withCredentials: true }
       );
       return reponse.data;
     },
     onSuccess: (data) => {
-      console.log("Success",data);
+      setMessage("");
+      setToken(data.accessToken);
     },
     onError: (error : any) => {
       setMessage(error.response.data.message);
@@ -40,13 +43,14 @@ export default function Popups({ onClose }: PopupProps) {
 
   const RegisMutation = useMutation({
     mutationFn: async (payload: FormPayload) => {
-      const reponse = await axios.post(
+      const reponse = await api.post(
         `${import.meta.env.VITE_SecurePass_API}/api/user/signup`,
         payload
       );
       return reponse.data;
     },
     onSuccess: (data) => {
+      //Todo : Continue to Login
       console.log("Success",data);
     },
     onError: (error : any) => {
