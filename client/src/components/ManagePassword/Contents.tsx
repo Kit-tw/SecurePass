@@ -1,5 +1,24 @@
+import { useState } from "react";
+import DialogComponents from "../Utills/dialog";
+
+
+interface DataProps{
+  name : string
+  URL : string
+  email : string
+  password : string
+}
+
+interface mode{
+  mode : "Add" | "Edit" | "Delete"
+}
 
 export default function Content() {
+  
+  const [dialog ,setDialog] = useState<boolean>(false);
+  const [data , setData] = useState<DataProps>({name : "",URL : "",email : "",password : ""});
+  const [mode , setMode] = useState<mode>({mode : "Add"});
+
   return(
    <>
    <div className="w-full bg-primary p-5 my-10">
@@ -13,9 +32,10 @@ export default function Content() {
   <option value="txt">Export To .txt FILE</option>
 </select>
     </div>
-    <div className="flex bg-gray p-1 lg:p-2">
-        <label htmlFor="" className="text-xs lg:text-md font-mono text-primary"> + Add item</label>
+    <div className="flex bg-gray p-1 lg:p-2 hover:cursor-pointer" onClick={() => setDialog(!dialog)}>
+        <label htmlFor="" className="text-xs lg:text-md font-mono text-primary hover:cursor-pointer"> + Add item</label>
     </div>
+    {dialog && <DialogComponents dialog={dialog} setDialog={setDialog} data={data} setData={setData} mode={mode} />}
     </div>
     </div>
    </div>

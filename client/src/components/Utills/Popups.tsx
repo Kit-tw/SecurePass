@@ -28,7 +28,7 @@ export default function Popups({ onClose }: PopupProps) {
   const loginMutation = useMutation({
     mutationFn: async (payload: FormPayload) => {
       const reponse = await api.post(
-        `${import.meta.env.VITE_SecurePass_API}/api/user/signin`,
+        `/api/user/signin`,
         payload,
         { withCredentials: true }
       );
@@ -47,7 +47,7 @@ export default function Popups({ onClose }: PopupProps) {
   const RegisMutation = useMutation({
     mutationFn: async (payload: FormPayload) => {
       const reponse = await api.post(
-        `${import.meta.env.VITE_SecurePass_API}/api/user/signup`,
+        `/api/user/signup`,
         payload
       );
       return reponse.data;
