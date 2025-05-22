@@ -21,7 +21,7 @@ app.get('/', (req: Request, res: Response) => {
 
 app.use('/api', rootRouter);
 
-app.get('/protected', authenticateToken, (req : any ,res : any) => {
+app.get('/me', authenticateToken, (req : any ,res : any) => {
     return res.json({ user: req.user });
 })
 

@@ -5,6 +5,7 @@ import { User } from '../../models/user.model';
 import jwt, { JwtPayload, Secret } from 'jsonwebtoken';
 import { generateAccessToken, generateRefreshToken, VerifyRefreshToken } from '../../utils/token.utils';
 import { CustomJwtPayload } from '../../models/customJwtPayload.model';
+import { CustomRequest } from '../../models/customRequest.model';
 
 
 
@@ -69,3 +70,23 @@ export const logout = (req : Request , res : Response) =>{
     res.clearCookie('refreshToken');
     res.sendStatus(204).send();
 }
+
+export const getMe = (req: Request, res: Response) => {
+  const refreshToken = req.cookies?.refreshToken;
+
+  if (!refreshToken) {
+    res.status(401).json({ message: 'No refresh token found' });
+    return;
+  }
+
+  try {
+    const user = VerifyRefreshToken(refreshToken); // your own function
+    const accessToken = generateAccessToken({ email: user.email });
+
+    res.status(200).json({ accessToken, user: { email: user.email } });
+    return;
+  } catch (err) {
+    res.status(403).json({ message: 'Invalid or expired refresh token' });
+    return;
+  }
+};
