@@ -5,6 +5,7 @@ interface AuthContextType {
   token: string | null;
   setToken: (token: string | null) => void;
   api: AxiosInstance; 
+  loading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -16,24 +17,30 @@ export const useAuth= () =>{
     return authContext;
 }
 export const AuthProvider = ({ children }: { children: ReactNode }) =>{
+ const [loading, setLoading] = useState(true);
  const api = axios.create({baseURL : import.meta.env.VITE_SecurePass_API,withCredentials: true,});
  const [token,setToken] = useState<string | null>(null);
  useEffect(()=>{
     const fetchMe = async () =>{
         try{
-            const reponse = await api.get('/api/user/refresh');
+            console.log(token)
+            const reponse = await api.get('/api/user/me');
             setToken(reponse.data.accessToken);
+             console.log("Token restored from /api/me");
         }catch(error){
             setToken(null);
-        }
+        } finally {
+      setLoading(false);
+    }
     }
     fetchMe();
  },[]);
 
  useLayoutEffect(()=>{
+    console.log("This is config ",token);
     const authInterceptor = api.interceptors.request.use((config) =>{
         config.headers.Authorization = token ?  `Bearer ${token}` : config.headers.Authorization;
-        console.log(config.headers.Authorization)
+        console.log("This is config ",config.headers.Authorization)
         return config;
     });
     return ()=>{
@@ -60,7 +67,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) =>{
     return () => api.interceptors.response.eject(refreshInterceptor);
  }, []);
  return (
-    <AuthContext.Provider value={{ token, setToken, api }}>
+    <AuthContext.Provider value={{ token, setToken, api ,loading}}>
       {children}
     </AuthContext.Provider>
   );

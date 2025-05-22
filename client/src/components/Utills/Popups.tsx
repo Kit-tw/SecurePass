@@ -2,6 +2,7 @@ import { useState } from "react";
 import bg from "../../assets/bg.jpg";
 import { useMutation } from "@tanstack/react-query";
 import { useAuth } from "./AuthProvider";
+import { useNavigate } from "react-router-dom";
 interface PopupProps {
   onClose: () => void;
 }
@@ -15,6 +16,7 @@ interface FormPayload {
 }
 
 export default function Popups({ onClose }: PopupProps) {
+  const Navigate = useNavigate();
   const {setToken , api} = useAuth();
   const [popupform, setPopupform] = useState<FromState>({ state: "Register" });
   const [form, setForm] = useState<FormPayload>({
@@ -35,6 +37,7 @@ export default function Popups({ onClose }: PopupProps) {
     onSuccess: (data) => {
       setMessage("");
       setToken(data.accessToken);
+      Navigate('/ManagePassword')
     },
     onError: (error : any) => {
       setMessage(error.response.data.message);
@@ -57,14 +60,13 @@ export default function Popups({ onClose }: PopupProps) {
       setMessage(error.response.data.message);
     },
   });
-  const handleLogin = (e: React.FormEvent) => {
+  const handleForm = (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.email.trim() || !form.password.trim()) {
       setMessage("Email or Password is Empty");
       return;
     }
     // Todo : Regex Email
-    console.log(  `${import.meta.env.VITE_SecurePass_API}/api/user/signin`)
     switch(popupform.state){
       case 'Login':
         return loginMutation.mutate(form);
@@ -86,7 +88,7 @@ export default function Popups({ onClose }: PopupProps) {
 
       {/* Popup */}
       {/* Close button for desktop */}
-      <form onSubmit={handleLogin}
+      <form onSubmit={handleForm}
         role="dialog"
         aria-modal="true"
         className="fixed z-50 flex flex-col lg:flex-row bg-white rounded-lg 

@@ -8,6 +8,8 @@ import ManagePasswordPage from './page/ManagePassword.tsx'
 import { QueryClientProvider } from '@tanstack/react-query'
 import queryClient from './queryClient.ts'
 import { AuthProvider } from './components/Utills/AuthProvider.tsx'
+import { ProtectedRoute } from './components/Utills/ProtectedRoute.tsx'
+import React from 'react'
 const router = createBrowserRouter([
   {
     path:"/",
@@ -22,18 +24,23 @@ const router = createBrowserRouter([
     element:<BreachDetectionPage/>
   },
   {
-    path:"/managepassword",
-    element:<ManagePasswordPage/>
-  },
+    element:<ProtectedRoute/>,
+    children:[      
+      {
+        path:"/managepassword",
+        element:<ManagePasswordPage/>
+      },
+    ]
+  }
 
 ])
 createRoot(document.getElementById('root')!).render(
-  <>
+  <React.StrictMode>
   <QueryClientProvider client={queryClient}>
   <AuthProvider>
         <RouterProvider router={router}/>\
   </AuthProvider>
         </QueryClientProvider>
 
-  </>,
+  </React.StrictMode>,
 )

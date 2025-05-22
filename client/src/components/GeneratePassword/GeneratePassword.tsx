@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "../Utills/AuthProvider";
 
 const generatepassFn = (
   length: number,
