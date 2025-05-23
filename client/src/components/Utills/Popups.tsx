@@ -1,7 +1,7 @@
 import { useState } from "react";
 import bg from "../../assets/bg.jpg";
 import { useMutation } from "@tanstack/react-query";
-import { useAuth } from "./AuthProvider";
+import { useAuth } from "../../hooks/AuthProvider";
 import { useNavigate } from "react-router-dom";
 interface PopupProps {
   onClose: () => void;

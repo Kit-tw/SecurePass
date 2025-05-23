@@ -1,22 +1,20 @@
+import { useManage } from "../../hooks/ManageContext";
+
+
+interface TableType{
+  id? : number
+  name : string
+  URL : string
+  email : string
+  password : string
+}
+
 export default function TableComponent() {
-    const data = {
+  const {manageData} = useManage();
+   
+    const table = {
       header: ["Name", "URL", "Email", "Password", "Options"],
-      rows: [
-        {
-          name: "Facebook",
-          url: "www.facebook.com",
-          email: "test@gmail.com",
-          password: "123456",
-          options: "Edit",
-        },
-        {
-          name: "Google",
-          url: "www.google.com",
-          email: "user@gmail.com",
-          password: "abcdef",
-          options: "Edit",
-        },
-      ],
+      rows:manageData
     };
   
     return (
@@ -24,7 +22,7 @@ export default function TableComponent() {
         <table className="min-w-full text-deep border border-collapse">
           <thead>
             <tr className="bg-deep text-light">
-              {data.header.map((title, index) => (
+              {table.header.map((title, index) => (
                 <th key={index} className="p-2 text-center whitespace-nowrap">
                   {title}
                 </th>
@@ -32,15 +30,15 @@ export default function TableComponent() {
             </tr>
           </thead>
           <tbody>
-            {data.rows.map((row, rowIndex) => (
+            {table.rows ? table.rows.map((row, rowIndex) => (
               <tr key={rowIndex} className="text-center border-t">
                 <td className="p-2">{row.name}</td>
-                <td className="p-2">{row.url}</td>
+                <td className="p-2">{row.URL}</td>
                 <td className="p-2">{row.email}</td>
                 <td className="p-2">{row.password}</td>
-                <td className="p-2">{row.options}</td>
+                <td className="p-2"><p>Edit</p><p>Delete</p></td>
               </tr>
-            ))}
+            )) : "No password saved"}
           </tbody>
         </table>
       </div>

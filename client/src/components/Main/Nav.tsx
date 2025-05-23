@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import Popups from "../Utills/Popups";
 import { useState } from "react";
-import { useAuth } from "../Utills/AuthProvider";
+import { useAuth } from "../../hooks/AuthProvider";
 
 
 export default function NavComponents(){

@@ -2,12 +2,6 @@ import { useState } from "react";
 import DialogComponents from "../Utills/dialog";
 
 
-interface DataProps{
-  name : string
-  URL : string
-  email : string
-  password : string
-}
 
 interface mode{
   mode : "Add" | "Edit" | "Delete"
@@ -16,7 +10,6 @@ interface mode{
 export default function Content() {
   
   const [dialog ,setDialog] = useState<boolean>(false);
-  const [data , setData] = useState<DataProps>({name : "",URL : "",email : "",password : ""});
   const [mode , setMode] = useState<mode>({mode : "Add"});
 
   return(
@@ -35,7 +28,7 @@ export default function Content() {
     <div className="flex bg-gray p-1 lg:p-2 hover:cursor-pointer" onClick={() => setDialog(!dialog)}>
         <label htmlFor="" className="text-xs lg:text-md font-mono text-primary hover:cursor-pointer"> + Add item</label>
     </div>
-    {dialog && <DialogComponents dialog={dialog} setDialog={setDialog} data={data} setData={setData} mode={mode} />}
+    {dialog && <DialogComponents dialog={dialog} setDialog={setDialog} mode={mode} />}
     </div>
     </div>
    </div>

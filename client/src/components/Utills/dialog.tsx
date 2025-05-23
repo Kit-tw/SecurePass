@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query"
 import React, { useState } from "react"
-import { useAuth } from "./AuthProvider"
+import { useAuth } from "../../hooks/AuthProvider"
+import { useManage } from "../../hooks/ManageContext"
 
 interface DataProps{
   name : string
@@ -8,6 +9,15 @@ interface DataProps{
   email : string
   password : string
 }
+
+interface TableType {
+  id?: number;
+  name: string;
+  URL: string;
+  email: string;
+  password: string;
+}
+
 
 interface mode{
   mode : "Add" | "Edit" | "Delete"
@@ -17,24 +27,25 @@ interface mode{
 interface Props  {
    dialog : boolean
    setDialog : React.Dispatch<React.SetStateAction<boolean>>;
-   data : DataProps
-   setData : React.Dispatch<React.SetStateAction<DataProps>>;
    mode : mode
 }
-export default function DialogComponents({dialog,setDialog,data,setData,mode} : Props){
+export default function DialogComponents({dialog,setDialog,mode} : Props){
    const {api} = useAuth();
+   const [data , setData] = useState<TableType>({name : "",URL : "",email : "",password : ""});
+   const {setManageData} = useManage();
    const [message,setMessage] = useState<string>("");
    const addMutation = useMutation({
       mutationFn: async(payload : DataProps) =>{
           const reponse = await api.post(
-        `/api/items`,
+        `/api/item/add`,
         payload,
         { withCredentials: true }
       );
       return reponse.data;
       },onSuccess:(res )=>{
          setMessage("");
-         setData(data);
+         console.table(res)
+         setManageData((prev) => prev ? [...prev, res] : [res]);
          setDialog(false);
       },onError:(error : any)=>{
          setMessage(error.reponse.data.message)
@@ -44,6 +55,7 @@ export default function DialogComponents({dialog,setDialog,data,setData,mode} : 
       e.preventDefault();
       switch(mode.mode){
          case 'Add':
+            return addMutation.mutate(data);
 
       }
    }
