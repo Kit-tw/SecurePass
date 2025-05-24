@@ -6,7 +6,14 @@ export const getItems = async (req : CustomRequest , res: Response , next : Next
     try{
     const user = req.user;
     const userDB = await prismaClient.user.findFirst({where:{email : user?.email}})
-    const items = await prismaClient.manageItem.findMany({where:{OwnerId : userDB?.id}});
+   const items = await prismaClient.manageItem.findMany({
+  where: {
+    OwnerId: userDB?.id,
+  },
+  orderBy: {
+    id: 'asc',
+  },
+});
      res.status(200).json(items);
     return;
         }catch(error){

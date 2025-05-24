@@ -23,7 +23,11 @@ export default function NavComponents(){
         >
           Login
         </button>
-        : <Link to={{pathname : "/ManagePassword"}} className="text-mono text-lg text-black font-bold hover:cursor-pointer hover:text-accent hover:scale-[1.1]  transform transition duration-250">ManagePassword</Link>
+        :
+        <> 
+        <Link to={{pathname : "/ManagePassword"}} className="text-mono text-lg text-black font-bold hover:cursor-pointer hover:text-accent hover:scale-[1.1]  transform transition duration-250">ManagePassword</Link>
+        <button className="text-mono text-lg text-black font-bold hover:cursor-pointer hover:text-accent hover:scale-[1.1]  transform transition duration-250">Logout</button>
+        </>
         }
         {isPopup && <Popups onClose={() => setIsPopup(false)} />}
         </div>

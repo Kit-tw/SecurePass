@@ -5,9 +5,7 @@ import { tokenPayload } from "../models/tokenpayload.model";
 import { VerifyAccessToken } from "../utils/token.utils";
 export function authenticateToken(req : CustomRequest,res : Response , next : NextFunction){
      const authHeader = req.headers.authorization;
-     console.log(req.headers.authorization)
     const Token = authHeader && authHeader.split(' ')[1];
-     console.log(Token)
     if(!Token){
         res.status(401).json({error : 'Access Denied'});
         return;
@@ -17,7 +15,7 @@ export function authenticateToken(req : CustomRequest,res : Response , next : Ne
     req.user = payload;
     next();
   } catch (err) {
-   res.status(401).json({ message: 'Invalid Credential' });
+   res.status(403).json({ message: 'Invalid Credential' });
    return;
   }
 

@@ -49,14 +49,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) =>{
  },[token]);
 
  useLayoutEffect(() =>{
-    const refreshInterceptor = api.interceptors.response.use((response) => response,async (error) =>{
+    console.log("THIS TRIGGEr")
+    const refreshInterceptor = api.interceptors.response.use((response) =>  response,async (error) =>{
         const originalRequest = error.config;
         if(error.response.status === 403 && !originalRequest._retry){
+            originalRequest._retry = true;
             try{
-                const response = await axios.get('/api/user/refresh');
+                const response = await api.get('/api/user/refresh');
                 setToken(response.data.accessToken);
                 originalRequest.headers.Authorization = `Bearer ${response.data.accessToken}`;
-                originalRequest._retry = true;
                 return api(originalRequest);
             }catch{
                 setToken(null);
@@ -65,7 +66,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) =>{
         return Promise.reject(error);
     })
     return () => api.interceptors.response.eject(refreshInterceptor);
- }, []);
+ }, [api]);
  return (
     <AuthContext.Provider value={{ token, setToken, api ,loading}}>
       {children}

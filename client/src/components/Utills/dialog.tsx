@@ -3,12 +3,6 @@ import React, { useState } from "react"
 import { useAuth } from "../../hooks/AuthProvider"
 import { useManage } from "../../hooks/ManageContext"
 
-interface DataProps{
-  name : string
-  URL : string
-  email : string
-  password : string
-}
 
 interface TableType {
   id?: number;
@@ -28,14 +22,15 @@ interface Props  {
    dialog : boolean
    setDialog : React.Dispatch<React.SetStateAction<boolean>>;
    mode : mode
+   dataEdit? : TableType
 }
-export default function DialogComponents({dialog,setDialog,mode} : Props){
+export default function DialogComponents({dialog,setDialog,mode,dataEdit} : Props){
    const {api} = useAuth();
-   const [data , setData] = useState<TableType>({name : "",URL : "",email : "",password : ""});
+   const [data , setData] = useState<TableType>({id: dataEdit?dataEdit.id:0,name : dataEdit?dataEdit.name:"",URL : dataEdit?dataEdit.URL:"",email : dataEdit?dataEdit.email:"",password : dataEdit?dataEdit.password:""});
    const {setManageData} = useManage();
    const [message,setMessage] = useState<string>("");
    const addMutation = useMutation({
-      mutationFn: async(payload : DataProps) =>{
+      mutationFn: async(payload : TableType) =>{
           const reponse = await api.post(
         `/api/item/add`,
         payload,
@@ -44,11 +39,29 @@ export default function DialogComponents({dialog,setDialog,mode} : Props){
       return reponse.data;
       },onSuccess:(res )=>{
          setMessage("");
-         console.table(res)
          setManageData((prev) => prev ? [...prev, res] : [res]);
          setDialog(false);
       },onError:(error : any)=>{
          setMessage(error.reponse.data.message)
+      }
+   })
+
+   const editMutation = useMutation({
+      mutationFn : async (payload : TableType) =>{
+         const response = await api.post(`/api/item/update`,payload,
+        { withCredentials: true })
+        return response.data
+      },onSuccess:(res) =>{
+         setMessage("");
+         setManageData((prev) =>
+  prev?.map((item) =>
+    item.id === data.id ? { ...item, ...data } : item
+  )
+);
+
+         setDialog(false);
+      },onError:(error : any) =>{
+         setMessage(error.reponse.data.message);
       }
    })
    const handleSubmit = (e : React.FormEvent) =>{
@@ -56,6 +69,8 @@ export default function DialogComponents({dialog,setDialog,mode} : Props){
       switch(mode.mode){
          case 'Add':
             return addMutation.mutate(data);
+         case 'Edit':
+            return editMutation.mutate(data);
 
       }
    }
@@ -73,23 +88,23 @@ export default function DialogComponents({dialog,setDialog,mode} : Props){
        <div className="flex flex-row justify-center flex-wrap self-center gap-4 w-full my-5">
           <div className="flex flex-col">
        <p>Name</p>
-       <input type="text" className="p-2 w-xs rounded-2xl bg-light text-deep shadow-xl " placeholder="MyAccount01" onChange={(e) =>setData({...data,name : e.target.value} )}required/>
+       <input type="text" className="p-2 w-xs rounded-2xl bg-light text-deep shadow-xl " placeholder="MyAccount01" value={data.name} onChange={(e) =>setData({...data,name : e.target.value} )}required/>
       
           </div>
           <div className="flex flex-col">
        <p>URL</p>
-       <input type="text" className="p-2 w-xs rounded-2xl bg-light text-deep shadow-xl " placeholder="www.google.com"  onChange={(e) =>setData({...data,URL : e.target.value} )} required/>
+       <input type="text" className="p-2 w-xs rounded-2xl bg-light text-deep shadow-xl " placeholder="www.google.com" value={data.URL}  onChange={(e) =>setData({...data,URL : e.target.value} )} required/>
           </div>
           <div className="flex flex-col">
        <p>Email</p>
-       <input type="text" className="p-2 w-xs rounded-2xl bg-light text-deep shadow-xl " placeholder="Test@gmail.com"  onChange={(e) =>setData({...data,email : e.target.value} )} required/>
+       <input type="text" className="p-2 w-xs rounded-2xl bg-light text-deep shadow-xl " placeholder="Test@gmail.com" value={data.email}  onChange={(e) =>setData({...data,email : e.target.value} )} required/>
       
           </div>
           <div className="flex flex-col">
        <p>Password</p>
-       <input type="password" className="p-2 w-xs rounded-2xl bg-light text-deep shadow-xl " placeholder="1234567"  onChange={(e) =>setData({...data,password : e.target.value} )} required />
+       <input type="password" className="p-2 w-xs rounded-2xl bg-light text-deep shadow-xl " placeholder="1234567" value={data.password}   onChange={(e) =>setData({...data,password : e.target.value} )} required />
           </div>
-
+      {message}
        </div>
           <button className="self-center text-md rounded-lg font-bold font-mono bg-accent text-light  px-4 py-2 my-10 hover:cursor-pointer" > {mode.mode}</button>
       </dialog>
