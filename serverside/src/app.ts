@@ -9,7 +9,8 @@ const app: Express = express();
 const corsOptions ={
     origin:process.env.FrontEnd_URL, 
     credentials:true,            
-    optionSuccessStatus:200
+    optionSuccessStatus:200,
+    exposedHeaders: ['X-Filename']
 }
 app.use(cors(corsOptions));
 app.use(express.json());
