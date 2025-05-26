@@ -37,9 +37,9 @@ export default function DialogComponents({dialog,setDialog,mode,dataEdit} : Prop
         { withCredentials: true }
       );
       return reponse.data;
-      },onSuccess:(res )=>{
+      },onSuccess:()=>{
          setMessage("");
-         setManageData((prev) => prev ? [...prev, res] : [res]);
+         setManageData((prev) => prev ? [...prev, data] : [data]);
          setDialog(false);
       },onError:(error : any)=>{
          setMessage(error.reponse.data.message)
@@ -51,7 +51,7 @@ export default function DialogComponents({dialog,setDialog,mode,dataEdit} : Prop
          const response = await api.post(`/api/item/update`,payload,
         { withCredentials: true })
         return response.data
-      },onSuccess:(res) =>{
+      },onSuccess:() =>{
          setMessage("");
          setManageData((prev) =>
   prev?.map((item) =>

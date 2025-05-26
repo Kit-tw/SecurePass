@@ -1,12 +1,29 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Popups from "../Utills/Popups";
 import { useState } from "react";
 import { useAuth } from "../../hooks/AuthProvider";
+import { useMutation } from "@tanstack/react-query";
 
 
 export default function NavComponents(){
     const [isPopup,setIsPopup] = useState(false);
-    const {token} = useAuth();
+    const {token,api,setToken} = useAuth();
+    const navigate = useNavigate(); 
+    const fetchLogout =async () =>{
+      const response = await api.post('/api/user/logout', { } , { withCredentials: true });
+      return response.data;
+    }
+  const logoutMutation = useMutation({
+    mutationFn: fetchLogout,
+    onSuccess: (res) => {
+      console.log("this is success");
+      setToken(null);
+      navigate("/passwordgenerate");
+    },
+  });
+    const HandleLogout = async () =>{
+      logoutMutation.mutate();
+    }
     return(
         <nav className="flex flex-col justify-between bg-white p-5  shadow-lg lg:flex-row">
         
@@ -26,7 +43,7 @@ export default function NavComponents(){
         :
         <> 
         <Link to={{pathname : "/ManagePassword"}} className="text-mono text-lg text-black font-bold hover:cursor-pointer hover:text-accent hover:scale-[1.1]  transform transition duration-250">ManagePassword</Link>
-        <button className="text-mono text-lg text-black font-bold hover:cursor-pointer hover:text-accent hover:scale-[1.1]  transform transition duration-250">Logout</button>
+        <button className="text-mono text-lg text-black font-bold hover:cursor-pointer hover:text-accent hover:scale-[1.1]  transform transition duration-250" onClick={HandleLogout}>Logout</button>
         </>
         }
         {isPopup && <Popups onClose={() => setIsPopup(false)} />}

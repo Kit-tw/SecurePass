@@ -68,7 +68,7 @@ export const refresh = (req: Request , res : Response , next : NextFunction ) =>
 
 export const logout = (req : Request , res : Response) =>{
     res.clearCookie('refreshToken');
-    res.sendStatus(204).send();
+    res.status(200).json({message : "logout success"});
 }
 
 export const getMe = (req: Request, res: Response) => {

@@ -17,7 +17,7 @@ interface mode {
 
 export default function TableComponent() {
   const { api } = useAuth();
-  const { manageData,setManageData } = useManage();
+  const { manageData, setManageData } = useManage();
   const [dialog, setDialog] = useState<boolean>(false);
   const [dataEdit, setDataEdit] = useState<TableType>();
   const [mode, setMode] = useState<mode>({ mode: "Edit" });
@@ -33,17 +33,25 @@ export default function TableComponent() {
   };
 
   const deleteMutation = useMutation({
-    mutationFn: async (id : number) => {
+    mutationFn: async (id: number) => {
       {
         const response = await api.delete(`/api/item/delete/${id}`);
         return response.data;
       }
-    },onSuccess:(res) =>{
-      
-      setManageData(prev => prev?.filter((data) => data.id != res.id))
-    }
+    },
+    onSuccess: (res) => {
+      setManageData((prev) => prev?.filter((data) => data.id != res.id));
+    },
   });
 
+  const handleShow = (index: number) => {
+    const input = document.getElementById(
+      `passwordfield-${index}`
+    ) as HTMLInputElement;
+    if (input) {
+      input.type = input.type === "password" ? "text" : "password";
+    }
+  };
   return (
     <div className="overflow-x-auto w-full">
       {dialog && (
@@ -71,7 +79,18 @@ export default function TableComponent() {
                   <td className="p-2">{row.name}</td>
                   <td className="p-2">{row.URL}</td>
                   <td className="p-2">{row.email}</td>
-                  <td className="p-2">{row.password}</td>
+                  <input
+                    type="password"
+                    id={`passwordfield-${rowIndex}`}
+                    value={row.password}
+                    disabled
+                  />
+                  <button
+                    onClick={() => handleShow(rowIndex)}
+                    className="bg-yellow rounded-lg px-2 hover:cursor-pointer"
+                  >
+                    Show
+                  </button>
                   <td className="p-2">
                     <div className="flex flex-row justify-center gap-4">
                       <button
@@ -80,7 +99,12 @@ export default function TableComponent() {
                       >
                         Edit
                       </button>
-                      <button className="bg-red-400 px-4 rounded-lg text-black hover:text-light hover:cursor-pointer" onClick={() => row.id ? deleteMutation.mutate(row.id):''}>
+                      <button
+                        className="bg-red-400 px-4 rounded-lg text-black hover:text-light hover:cursor-pointer"
+                        onClick={() =>
+                          row.id ? deleteMutation.mutate(row.id) : ""
+                        }
+                      >
                         Delete
                       </button>
                     </div>
