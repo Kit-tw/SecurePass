@@ -1,6 +1,7 @@
 import { NextFunction, Response } from "express"
 import { CustomRequest } from "../../models/customRequest.model"
 import { prismaClient } from "../../app";
+import { decrypt } from "../../utils/crypto.utils";
 
 export const getItems = async (req : CustomRequest , res: Response , next : NextFunction) =>{
     try{
@@ -14,6 +15,7 @@ export const getItems = async (req : CustomRequest , res: Response , next : Next
     id: 'asc',
   },
 });
+  items.map((data) => data.password = decrypt(data.password));
      res.status(200).json(items);
     return;
         }catch(error){
