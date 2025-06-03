@@ -17,7 +17,7 @@ interface mode {
 
 export default function TableComponent() {
   const { api } = useAuth();
-  const { manageData, setManageData } = useManage();
+  const { manageData, setManageData, page, setPage, totalPage} = useManage();
   const [dialog, setDialog] = useState<boolean>(false);
   const [dataEdit, setDataEdit] = useState<TableType>();
   const [mode, setMode] = useState<mode>({ mode: "Edit" });
@@ -53,67 +53,76 @@ export default function TableComponent() {
     }
   };
   return (
-    <div className="overflow-x-auto w-full">
-      {dialog && (
-        <DialogComponents
-          dialog={dialog}
-          setDialog={setDialog}
-          mode={mode}
-          dataEdit={dataEdit}
-        />
-      )}
-      <table className="min-w-full text-deep border border-collapse">
-        <thead>
-          <tr className="bg-deep text-light">
-            {table.header.map((title, index) => (
-              <th key={index} className="p-2 text-center whitespace-nowrap">
-                {title}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {table.rows
-            ? table.rows.map((row, rowIndex) => (
-                <tr key={rowIndex} className="text-center border-t">
-                  <td className="p-2">{row.name}</td>
-                  <td className="p-2">{row.URL}</td>
-                  <td className="p-2">{row.email}</td>
-                  <input
-                    type="password"
-                    id={`passwordfield-${rowIndex}`}
-                    value={row.password}
-                    disabled
-                  />
-                  <button
-                    onClick={() => handleShow(rowIndex)}
-                    className="bg-yellow rounded-lg px-2 hover:cursor-pointer"
-                  >
-                    Show
-                  </button>
-                  <td className="p-2">
-                    <div className="flex flex-row justify-center gap-4">
-                      <button
-                        className="bg-secondary px-4 rounded-lg text-black hover:text-accent hover:cursor-pointer"
-                        onClick={() => HandleEdit(row)}
-                      >
-                        Edit
-                      </button>
-                      <button
-                        className="bg-red-400 px-4 rounded-lg text-black hover:text-light hover:cursor-pointer"
-                        onClick={() =>
-                          row.id ? deleteMutation.mutate(row.id) : ""
-                        }
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))
-            : "No password saved"}
-        </tbody>
-      </table>
-    </div>
+    <>
+      <div className="overflow-x-auto w-full">
+        {dialog && (
+          <DialogComponents
+            dialog={dialog}
+            setDialog={setDialog}
+            mode={mode}
+            dataEdit={dataEdit}
+          />
+        )}
+        <table className="min-w-full text-deep border border-collapse">
+          <thead>
+            <tr className="bg-deep text-light">
+              {table.header.map((title, index) => (
+                <th key={index} className="p-2 text-center whitespace-nowrap">
+                  {title}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {table.rows
+              ? table.rows.map((row, rowIndex) => (
+                  <tr key={rowIndex} className="text-center border-t">
+                    <td className="p-2">{row.name}</td>
+                    <td className="p-2">{row.URL}</td>
+                    <td className="p-2">{row.email}</td>
+                    <input
+                      type="password"
+                      id={`passwordfield-${rowIndex}`}
+                      value={row.password}
+                      disabled
+                    />
+                    <button
+                      onClick={() => handleShow(rowIndex)}
+                      className="bg-yellow rounded-lg px-2 hover:cursor-pointer"
+                    >
+                      Show
+                    </button>
+                    <td className="p-2">
+                      <div className="flex flex-row justify-center gap-4">
+                        <button
+                          className="bg-secondary px-4 rounded-lg text-black hover:text-accent hover:cursor-pointer"
+                          onClick={() => HandleEdit(row)}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          className="bg-red-400 px-4 rounded-lg text-black hover:text-light hover:cursor-pointer"
+                          onClick={() =>
+                            row.id ? deleteMutation.mutate(row.id) : ""
+                          }
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              : "No password saved"}
+          </tbody>
+        </table>
+      </div>
+      <div className="flex flex-row w-full justify-end gap-4 mt-10">
+        <button onClick={() => setPage((prev) => Math.max(prev - 1, 1))} disabled={1 > page} className="p-2 bg-gray text-deep">
+          Prev
+        </button>
+        <label className="text-primary p-2">Page {page}</label>
+        <button onClick={() => setPage((prev) => prev + 1)} disabled={(totalPage - 1) < page} className="p-2 bg-gray text-deep">Next</button>
+      </div>
+    </>
   );
 }

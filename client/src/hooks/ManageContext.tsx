@@ -11,11 +11,21 @@ interface TableType {
   password: string;
 }
 
+interface TableResponse {
+  data: TableType[];
+  totalcount: number;
+}
+
 interface ManageContextType{
     manageData : TableType[] | undefined
     setManageData: React.Dispatch<React.SetStateAction<TableType[] | undefined>>
     search : string
     setSearch : React.Dispatch<React.SetStateAction<string>>
+    page: number;
+    setPage: React.Dispatch<React.SetStateAction<number>>;
+    limit: number;
+    setLimit: React.Dispatch<React.SetStateAction<number>>;
+    totalPage : number
 }
 
 const ManageContext =  createContext<ManageContextType | undefined>(undefined);
@@ -28,17 +38,21 @@ export const ManageProvider = ({ children }: { children: ReactNode }) => {
    const [manageData , setManageData] = useState<TableType[]>();
   const { api } = useAuth();
   const [search,setSearch] = useState<string>('');
+  const [page , setPage] = useState<number>(1);
+  const [limit , setLimit] = useState<number>(2);
   const debounceSearch =  useDebounce(search , 500);
-const { data } = useQuery<TableType[]>({
-  queryKey: ["data",debounceSearch],
-  queryFn: () => api.get(`/api/item?q=${debounceSearch}`).then((res) => res.data),
+  
+const { data } = useQuery<TableResponse>({
+  queryKey: ["data",debounceSearch,page,limit],
+  queryFn: () => api.get(`/api/item?q=${debounceSearch}&page=${page}&limit=${limit}`).then((res) => res.data),
+  
 });
-
+const totalPage = Math.ceil((data?.totalcount || 0) / limit);
 useEffect(() => {
-  if (data) setManageData(data);
+  if (data) setManageData(data?.data);
 }, [data]);
     return(
-        <ManageContext.Provider value = {{manageData , setManageData ,search , setSearch}}>
+        <ManageContext.Provider value = {{manageData , setManageData ,search , setSearch , page , setPage , limit , setLimit , totalPage}}>
         {children}
         </ManageContext.Provider>
     )
