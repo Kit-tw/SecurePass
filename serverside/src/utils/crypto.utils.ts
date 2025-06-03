@@ -15,18 +15,15 @@ export function encrypt(data : string){
     const cipher = crypto.createCipheriv(algorithm,Buffer.from(key),iv);
     let encrypted = cipher.update(data,"utf-8","hex");
     encrypted += cipher.final("hex");
-    console.log("encrypt : " , iv.toString("hex") , encrypted)
     return iv.toString("hex") + encrypted;
 }
 
 export function decrypt(data : string){
     const inputIV = data.slice(0,32);
     const encrypted = data.slice(32);
-    console.log("encrypt : " , data)
     const decipher = crypto.createDecipheriv(algorithm,Buffer.from(key),Buffer.from(inputIV,"hex"));
     let decrypted = decipher.update(encrypted,"hex","utf-8");
     decrypted += decipher.final("utf-8");
-    console.log("decrypted : " , decrypted)
     return decrypted;
 
 }
